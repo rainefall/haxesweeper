@@ -48,10 +48,11 @@ class Main extends hxd.App {
         board = [for (y in 0...BoardHeight) [for (x in 0...BoardWidth) 0 ]];
 
         // add bombs
-        for (y in 0...Bombs){
+        for (i in 0...Bombs){
             while (true){
                 var x = Std.int(Math.max(Std.int(Math.random()*BoardWidth)-1, 0));
                 var y = Std.int(Math.max(Std.int(Math.random()*BoardHeight)-1, 0));
+                trace (x); trace(y);
                 if (board[y][x] != -1) {
                     board[y][x] = -1;
                     break;
@@ -62,18 +63,20 @@ class Main extends hxd.App {
         // calculate other tiles
         for (y in 0...BoardHeight) {
             for (x in 0...BoardWidth) {
-                if (board[y][x] == -1) {
+                if (board[y][x] != -1) {
                     // we can calculate everything else
                     var n = 0;
                     if (y > 0 && x > 0 && board[y-1][x-1] == -1) n++;
                     if (y > 0 && board[y-1][x] == -1) n++;
                     if (y > 0 && x < BoardWidth-1 && board[y-1][x+1] == -1) n++;
+                    
                     if (x > 0 && board[y][x-1] == -1) n++;
-                    if (x > 0 && board[y][x] == -1) n++;
                     if (x < BoardWidth-1 && board[y][x+1] == -1) n++;
+                    
                     if (y < BoardHeight-1 && x > 0 && board[y+1][x-1] == -1) n++;
-                    if (y < BoardHeight-1 && x > 0 && board[y+1][x] == -1) n++;
+                    if (y < BoardHeight-1 && board[y+1][x] == -1) n++;
                     if (y < BoardHeight-1 && x < BoardWidth-1 && board[y+1][x+1] == -1) n++;
+                    
                     board[y][x] = Std.int(Math.min(n, 8));
                 }
                 // make visuals
@@ -86,21 +89,21 @@ class Main extends hxd.App {
                 blanks[y*BoardHeight+x].addChild(new h2d.Bitmap(blank));
                 // interactability
                 var interact = new h2d.Interactive(24,24,blanks[y*BoardHeight+x]);
-                interact.onPush = function(event : hxd.Event) {
-                    if (event.keyCode == Key.MOUSE_LEFT) reveal(x, y);
+                interact.onClick = function(e : hxd.Event) {
+                    if (e.button == 0) reveal(x, y);
                 }
-                //blanks[y*BoardHeight+x].addChild(interact);
+                blanks[y*BoardHeight+x].addChild(interact);
                 blanks[y*BoardHeight+x].setPosition(x * 24, y * 24);
             }
         }
     }
 
-    function reveal(x:Int, y:Int){
+    inline function reveal(x:Int, y:Int){
         visuals[y*BoardHeight+x].visible = true;
         blanks[y*BoardHeight+x].visible = false;
         if (board[y][x] == 0) {
             // it's zero we can reveal everything around it no problem
-            revealSurroundings(x,y);
+            //revealSurroundings(x,y);
         }
         if (board[y][x] == -1) {
             // you lose
@@ -108,16 +111,18 @@ class Main extends hxd.App {
         }
     }
 
-    function revealSurroundings(x:Int, y:Int) {
-        if (y > 0 && x > 0 && board[y-1][x-1] == -1) reveal(x-1, y-1);
-        if (y > 0 && board[y-1][x] == -1) reveal(x, y-1);
-        if (y > 0 && x < BoardWidth-1 && board[y-1][x+1] == -1) reveal(x+1, y-1);
-        if (x > 0 && board[y][x-1] == -1) reveal(x-1, y);
-        if (x > 0 && board[y][x] == -1) reveal(x, y);
-        if (x < BoardWidth-1 && board[y][x+1] == -1) reveal(x+1, y);
-        if (y < BoardHeight-1 && x > 0 && board[y+1][x-1] == -1) reveal(x-1, y+1);
-        if (y < BoardHeight-1 && x > 0 && board[y+1][x] == -1) reveal(x, y+1);
-        if (y < BoardHeight-1 && x < BoardWidth-1 && board[y+1][x+1] == -1) reveal(x+1, y+1);
+    inline function revealSurroundings(x:Int, y:Int) {
+        trace (x); trace (y);
+        if (y > 0 && x > 0 && board[y-1][x-1] != -1) reveal(x-1, y-1); // ul
+        if (y > 0 && board[y-1][x] != -1) reveal(x, y-1); // uc
+        if (y > 0 && x < BoardWidth-1 && board[y-1][x+1] != -1) reveal(x+1, y-1); // ur
+
+        if (x > 0 && board[y][x-1] != -1) reveal(x-1, y); // cl
+        if (x < BoardWidth-1 && board[y][x+1] != -1) reveal(x+1, y); // cr
+
+        if (y < BoardHeight-1 && x > 0 && board[y+1][x-1] != -1) reveal(x-1, y+1); // ll
+        if (y < BoardHeight-1 && board[y+1][x] != -1) reveal(x, y+1); // lc
+        if (y < BoardHeight-1 && x < BoardWidth-1 && board[y+1][x+1] != -1) reveal(x+1, y+1); // lr
     }
 
     override function update(dt:Float) {

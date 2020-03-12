@@ -298,12 +298,14 @@ Main.prototype = $extend(hxd_App.prototype,{
 		var _g31 = 0;
 		var _g4 = this.Bombs;
 		while(_g31 < _g4) {
-			var y1 = _g31++;
+			var i = _g31++;
 			while(true) {
 				var x1 = Math.max((Math.random() * this.BoardWidth | 0) - 1,0) | 0;
-				var y2 = Math.max((Math.random() * this.BoardHeight | 0) - 1,0) | 0;
-				if(this.board[y2][x1] != -1) {
-					this.board[y2][x1] = -1;
+				var y1 = Math.max((Math.random() * this.BoardHeight | 0) - 1,0) | 0;
+				haxe_Log.trace(x1,{ fileName : "Main.hx", lineNumber : 55, className : "Main", methodName : "init"});
+				haxe_Log.trace(y1,{ fileName : "Main.hx", lineNumber : 55, className : "Main", methodName : "init"});
+				if(this.board[y1][x1] != -1) {
+					this.board[y1][x1] = -1;
 					break;
 				}
 			}
@@ -311,65 +313,66 @@ Main.prototype = $extend(hxd_App.prototype,{
 		var _g5 = 0;
 		var _g6 = this.BoardHeight;
 		while(_g5 < _g6) {
-			var y3 = [_g5++];
+			var y2 = [_g5++];
 			var _g51 = 0;
 			var _g61 = this.BoardWidth;
 			while(_g51 < _g61) {
 				var x2 = [_g51++];
-				if(this.board[y3[0]][x2[0]] == -1) {
+				if(this.board[y2[0]][x2[0]] != -1) {
 					var n = 0;
-					if(y3[0] > 0 && x2[0] > 0 && this.board[y3[0] - 1][x2[0] - 1] == -1) {
+					if(y2[0] > 0 && x2[0] > 0 && this.board[y2[0] - 1][x2[0] - 1] == -1) {
 						++n;
 					}
-					if(y3[0] > 0 && this.board[y3[0] - 1][x2[0]] == -1) {
+					if(y2[0] > 0 && this.board[y2[0] - 1][x2[0]] == -1) {
 						++n;
 					}
-					if(y3[0] > 0 && x2[0] < this.BoardWidth - 1 && this.board[y3[0] - 1][x2[0] + 1] == -1) {
+					if(y2[0] > 0 && x2[0] < this.BoardWidth - 1 && this.board[y2[0] - 1][x2[0] + 1] == -1) {
 						++n;
 					}
-					if(x2[0] > 0 && this.board[y3[0]][x2[0] - 1] == -1) {
+					if(x2[0] > 0 && this.board[y2[0]][x2[0] - 1] == -1) {
 						++n;
 					}
-					if(x2[0] > 0 && this.board[y3[0]][x2[0]] == -1) {
+					if(x2[0] > 0 && this.board[y2[0]][x2[0]] == -1) {
 						++n;
 					}
-					if(x2[0] < this.BoardWidth - 1 && this.board[y3[0]][x2[0] + 1] == -1) {
+					if(x2[0] < this.BoardWidth - 1 && this.board[y2[0]][x2[0] + 1] == -1) {
 						++n;
 					}
-					if(y3[0] < this.BoardHeight - 1 && x2[0] > 0 && this.board[y3[0] + 1][x2[0] - 1] == -1) {
+					if(y2[0] < this.BoardHeight - 1 && x2[0] > 0 && this.board[y2[0] + 1][x2[0] - 1] == -1) {
 						++n;
 					}
-					if(y3[0] < this.BoardHeight - 1 && x2[0] > 0 && this.board[y3[0] + 1][x2[0]] == -1) {
+					if(y2[0] < this.BoardHeight - 1 && x2[0] > 0 && this.board[y2[0] + 1][x2[0]] == -1) {
 						++n;
 					}
-					if(y3[0] < this.BoardHeight - 1 && x2[0] < this.BoardWidth - 1 && this.board[y3[0] + 1][x2[0] + 1] == -1) {
+					if(y2[0] < this.BoardHeight - 1 && x2[0] < this.BoardWidth - 1 && this.board[y2[0] + 1][x2[0] + 1] == -1) {
 						++n;
 					}
-					this.board[y3[0]][x2[0]] = Math.min(n,8) | 0;
+					this.board[y2[0]][x2[0]] = Math.min(n,8) | 0;
 				}
 				this.visuals.push(new h2d_Object(this.s2d));
-				this.visuals[y3[0] * this.BoardHeight + x2[0]].addChild(new h2d_Bitmap(this.tiles[this.board[y3[0]][x2[0]] + 1]));
-				var _this = this.visuals[y3[0] * this.BoardHeight + x2[0]];
+				this.visuals[y2[0] * this.BoardHeight + x2[0]].addChild(new h2d_Bitmap(this.tiles[this.board[y2[0]][x2[0]] + 1]));
+				var _this = this.visuals[y2[0] * this.BoardHeight + x2[0]];
 				_this.posChanged = true;
 				_this.x = x2[0] * 24;
 				_this.posChanged = true;
-				_this.y = y3[0] * 24;
-				this.visuals[y3[0] * this.BoardHeight + x2[0]].set_visible(false);
+				_this.y = y2[0] * 24;
+				this.visuals[y2[0] * this.BoardHeight + x2[0]].set_visible(false);
 				this.blanks.push(new h2d_Object(this.s2d));
-				this.blanks[y3[0] * this.BoardHeight + x2[0]].addChild(new h2d_Bitmap(blank));
-				var interact = new h2d_Interactive(24,24,this.blanks[y3[0] * this.BoardHeight + x2[0]]);
-				interact.onPush = (function(x3,y4) {
-					return function(event) {
-						if(event.keyCode == 0) {
-							_gthis.reveal(x3[0],y4[0]);
+				this.blanks[y2[0] * this.BoardHeight + x2[0]].addChild(new h2d_Bitmap(blank));
+				var interact = new h2d_Interactive(24,24,this.blanks[y2[0] * this.BoardHeight + x2[0]]);
+				interact.onClick = (function(x3,y3) {
+					return function(e) {
+						if(e.button == 0) {
+							_gthis.reveal(x3[0],y3[0]);
 						}
 					};
-				})(x2,y3);
-				var _this1 = this.blanks[y3[0] * this.BoardHeight + x2[0]];
+				})(x2,y2);
+				this.blanks[y2[0] * this.BoardHeight + x2[0]].addChild(interact);
+				var _this1 = this.blanks[y2[0] * this.BoardHeight + x2[0]];
 				_this1.posChanged = true;
 				_this1.x = x2[0] * 24;
 				_this1.posChanged = true;
-				_this1.y = y3[0] * 24;
+				_this1.y = y2[0] * 24;
 			}
 		}
 	}
@@ -380,35 +383,34 @@ Main.prototype = $extend(hxd_App.prototype,{
 			this.revealSurroundings(x,y);
 		}
 		if(this.board[y][x] == -1) {
-			haxe_Log.trace("boom",{ fileName : "Main.hx", lineNumber : 107, className : "Main", methodName : "reveal"});
+			haxe_Log.trace("boom",{ fileName : "Main.hx", lineNumber : 108, className : "Main", methodName : "reveal"});
 		}
 	}
 	,revealSurroundings: function(x,y) {
-		if(y > 0 && x > 0 && this.board[y - 1][x - 1] == -1) {
+		haxe_Log.trace(x,{ fileName : "Main.hx", lineNumber : 113, className : "Main", methodName : "revealSurroundings"});
+		haxe_Log.trace(y,{ fileName : "Main.hx", lineNumber : 113, className : "Main", methodName : "revealSurroundings"});
+		if(y > 0 && x > 0 && this.board[y - 1][x - 1] != -1) {
 			this.reveal(x - 1,y - 1);
 		}
-		if(y > 0 && this.board[y - 1][x] == -1) {
+		if(y > 0 && this.board[y - 1][x] != -1) {
 			this.reveal(x,y - 1);
 		}
-		if(y > 0 && x < this.BoardWidth - 1 && this.board[y - 1][x + 1] == -1) {
+		if(y > 0 && x < this.BoardWidth - 1 && this.board[y - 1][x + 1] != -1) {
 			this.reveal(x + 1,y - 1);
 		}
-		if(x > 0 && this.board[y][x - 1] == -1) {
+		if(x > 0 && this.board[y][x - 1] != -1) {
 			this.reveal(x - 1,y);
 		}
-		if(x > 0 && this.board[y][x] == -1) {
-			this.reveal(x,y);
-		}
-		if(x < this.BoardWidth - 1 && this.board[y][x + 1] == -1) {
+		if(x < this.BoardWidth - 1 && this.board[y][x + 1] != -1) {
 			this.reveal(x + 1,y);
 		}
-		if(y < this.BoardHeight - 1 && x > 0 && this.board[y + 1][x - 1] == -1) {
+		if(y < this.BoardHeight - 1 && x > 0 && this.board[y + 1][x - 1] != -1) {
 			this.reveal(x - 1,y + 1);
 		}
-		if(y < this.BoardHeight - 1 && x > 0 && this.board[y + 1][x] == -1) {
+		if(y < this.BoardHeight - 1 && x > 0 && this.board[y + 1][x] != -1) {
 			this.reveal(x,y + 1);
 		}
-		if(y < this.BoardHeight - 1 && x < this.BoardWidth - 1 && this.board[y + 1][x + 1] == -1) {
+		if(y < this.BoardHeight - 1 && x < this.BoardWidth - 1 && this.board[y + 1][x + 1] != -1) {
 			this.reveal(x + 1,y + 1);
 		}
 	}
@@ -5218,7 +5220,7 @@ h2d_Interactive.prototype = $extend(h2d_Drawable.prototype,{
 	}
 	,draw: function(ctx) {
 		if(this.backgroundColor != null) {
-			this.emitTile(ctx,h2d_Tile.fromColor(this.backgroundColor,this.width | 0,this.height | 0,(this.backgroundColor >>> 24) / 255,{ fileName : "h2d/Interactive.hx", lineNumber : 67, className : "h2d.Interactive", methodName : "draw"}));
+			this.emitTile(ctx,h2d_Tile.fromColor(this.backgroundColor,this.width | 0,this.height | 0,(this.backgroundColor >>> 24) / 255));
 		}
 	}
 	,getBoundsRec: function(relativeTo,out,forSize) {
@@ -6159,7 +6161,7 @@ h2d_RenderContext.prototype = $extend(h3d_impl_RenderContext.prototype,{
 		}
 		this.beforeDraw();
 		var nverts = this.bufPos / this.stride | 0;
-		var tmp = new h3d_Buffer(nverts,this.stride,[h3d_BufferFlag.Quads,h3d_BufferFlag.Dynamic,h3d_BufferFlag.RawFormat],{ fileName : "h2d/RenderContext.hx", lineNumber : 274, className : "h2d.RenderContext", methodName : "_flush"});
+		var tmp = new h3d_Buffer(nverts,this.stride,[h3d_BufferFlag.Quads,h3d_BufferFlag.Dynamic,h3d_BufferFlag.RawFormat]);
 		tmp.uploadVector(this.buffer,0,nverts);
 		var _this = this.engine;
 		_this.renderBuffer(tmp,_this.mem.quadIndexes,2,0,-1);
@@ -6169,7 +6171,7 @@ h2d_RenderContext.prototype = $extend(h3d_impl_RenderContext.prototype,{
 	}
 	,beforeDraw: function() {
 		if(this.texture == null) {
-			this.texture = h3d_mat_Texture.fromColor(16711935,null,{ fileName : "h2d/RenderContext.hx", lineNumber : 283, className : "h2d.RenderContext", methodName : "beforeDraw"});
+			this.texture = h3d_mat_Texture.fromColor(16711935);
 		}
 		this.baseShader.texture__ = this.texture;
 		this.texture.set_filter((this.currentObj.smooth == null ? this.defaultSmooth : this.currentObj.smooth) ? h3d_mat_Filter.Linear : h3d_mat_Filter.Nearest);
@@ -6617,7 +6619,7 @@ h2d_RenderContext.prototype = $extend(h3d_impl_RenderContext.prototype,{
 		_this5.w = w3;
 		this.beforeDraw();
 		if(this.fixedBuffer == null || this.fixedBuffer.isDisposed()) {
-			this.fixedBuffer = new h3d_Buffer(4,8,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat],{ fileName : "h2d/RenderContext.hx", lineNumber : 398, className : "h2d.RenderContext", methodName : "drawTile"});
+			this.fixedBuffer = new h3d_Buffer(4,8,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
 			var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
 			var k = this1;
 			var v = 0;
@@ -7664,7 +7666,7 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 	,captureBitmap: function(target) {
 		var engine = h3d_Engine.CURRENT;
 		if(target == null) {
-			var tex = new h3d_mat_Texture(this.width,this.height,[h3d_mat_TextureFlags.Target],null,{ fileName : "h2d/Scene.hx", lineNumber : 714, className : "h2d.Scene", methodName : "captureBitmap"});
+			var tex = new h3d_mat_Texture(this.width,this.height,[h3d_mat_TextureFlags.Target]);
 			target = new h2d_Tile(tex,0,0,this.width,this.height);
 		}
 		engine.begin();
@@ -7783,7 +7785,7 @@ h2d_Tile.fromTexture = function(t) {
 };
 h2d_Tile.fromPixels = function(pixels,allocPos) {
 	var pix2 = pixels.makeSquare(true);
-	var t = h3d_mat_Texture.fromPixels(pix2,{ fileName : "h2d/Tile.hx", lineNumber : 247, className : "h2d.Tile", methodName : "fromPixels"});
+	var t = h3d_mat_Texture.fromPixels(pix2);
 	if(pix2 != pixels) {
 		pix2.dispose();
 	}
@@ -8966,7 +8968,6 @@ var h3d_Buffer = function(vertices,stride,flags,allocPos) {
 	this.vertices = vertices;
 	var this1 = 0;
 	this.flags = this1;
-	this.allocPos = allocPos;
 	if(flags != null) {
 		var _g = 0;
 		while(_g < flags.length) {
@@ -10100,7 +10101,7 @@ h3d_Engine.prototype = {
 	}
 	,pushTargets: function(textures) {
 		if(this.nullTexture == null) {
-			this.nullTexture = new h3d_mat_Texture(0,0,[h3d_mat_TextureFlags.NoAlloc],null,{ fileName : "h3d/Engine.hx", lineNumber : 334, className : "h3d.Engine", methodName : "pushTargets"});
+			this.nullTexture = new h3d_mat_Texture(0,0,[h3d_mat_TextureFlags.NoAlloc]);
 		}
 		this.pushTarget(this.nullTexture);
 		this.driver.setRenderTargets(textures);
@@ -17459,6 +17460,73 @@ var h3d_impl_RenderFlag = $hxEnums["h3d.impl.RenderFlag"] = { __ename__ : true, 
 	,CameraHandness: {_hx_index:0,__enum__:"h3d.impl.RenderFlag",toString:$estr}
 };
 h3d_impl_RenderFlag.__empty_constructs__ = [h3d_impl_RenderFlag.CameraHandness];
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
+var haxe_ds_StringMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	setReserved: function(key,value) {
+		if(this.rh == null) {
+			this.rh = { };
+		}
+		this.rh["$" + key] = value;
+	}
+	,getReserved: function(key) {
+		if(this.rh == null) {
+			return null;
+		} else {
+			return this.rh["$" + key];
+		}
+	}
+	,existsReserved: function(key) {
+		if(this.rh == null) {
+			return false;
+		}
+		return this.rh.hasOwnProperty("$" + key);
+	}
+	,remove: function(key) {
+		if(__map_reserved[key] != null) {
+			key = "$" + key;
+			if(this.rh == null || !this.rh.hasOwnProperty(key)) {
+				return false;
+			}
+			delete(this.rh[key]);
+			return true;
+		} else {
+			if(!this.h.hasOwnProperty(key)) {
+				return false;
+			}
+			delete(this.h[key]);
+			return true;
+		}
+	}
+	,keys: function() {
+		return HxOverrides.iter(this.arrayKeys());
+	}
+	,arrayKeys: function() {
+		var out = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) {
+			out.push(key);
+		}
+		}
+		if(this.rh != null) {
+			for( var key in this.rh ) {
+			if(key.charCodeAt(0) == 36) {
+				out.push(key.substr(1));
+			}
+			}
+		}
+		return out;
+	}
+	,__class__: haxe_ds_StringMap
+};
 var h3d_impl_InputNames = function(names) {
 	this.id = h3d_impl_InputNames.UID++;
 	this.names = names;
@@ -17503,9 +17571,6 @@ h3d_impl_Driver.prototype = {
 	,begin: function(frame) {
 	}
 	,log: function(str) {
-		if(this.logEnable) {
-			this.logImpl(str);
-		}
 	}
 	,generateMipMaps: function(texture) {
 		throw new js__$Boot_HaxeError("Mipmaps auto generation is not supported on this platform");
@@ -18034,7 +18099,7 @@ h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
 					switch(pt.t._hx_index) {
 					case 10:
 						var color = h3d_mat_Defaults.loadingTextureColor;
-						t = h3d_mat_Texture.fromColor(color,(color >>> 24) / 255,{ fileName : "h3d/impl/GlDriver.hx", lineNumber : 536, className : "h3d.impl.GlDriver", methodName : "uploadBuffer"});
+						t = h3d_mat_Texture.fromColor(color,(color >>> 24) / 255);
 						break;
 					case 12:
 						t = h3d_mat_Texture.defaultCubeTexture();
@@ -18747,7 +18812,7 @@ h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
 				switch(_g3) {
 				case "normal":
 					if(m.stride < 6) {
-						throw new js__$Boot_HaxeError("Buffer is missing NORMAL data, set it to RAW format ?" + Std.string(v.allocPos));
+						throw new js__$Boot_HaxeError("Buffer is missing NORMAL data, set it to RAW format ?");
 					}
 					pos1 = 3;
 					break;
@@ -18756,7 +18821,7 @@ h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
 					break;
 				case "uv":
 					if(m.stride < 8) {
-						throw new js__$Boot_HaxeError("Buffer is missing UV data, set it to RAW format ?" + Std.string(v.allocPos));
+						throw new js__$Boot_HaxeError("Buffer is missing UV data, set it to RAW format ?");
 					}
 					pos1 = 6;
 					break;
@@ -18765,7 +18830,7 @@ h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
 					pos1 = offset;
 					offset += a1.size;
 					if(offset > m.stride) {
-						throw new js__$Boot_HaxeError("Buffer is missing '" + s + "' data, set it to RAW format ?" + Std.string(v.allocPos));
+						throw new js__$Boot_HaxeError("Buffer is missing '" + s + "' data, set it to RAW format ?");
 					}
 				}
 				this.gl.vertexAttribPointer(a1.index,a1.size,a1.type,false,m.stride * 4,pos1 * 4);
@@ -19240,11 +19305,9 @@ h3d_impl_ManagedBuffer.prototype = {
 		if(p < 0) {
 			return null;
 		}
-		var b = new h3d_Buffer(vertices,this.stride,[h3d_BufferFlag.NoAlloc],{ fileName : "h3d/impl/ManagedBuffer.hx", lineNumber : 60, className : "h3d.impl.ManagedBuffer", methodName : "alloc"});
+		var b = new h3d_Buffer(vertices,this.stride,[h3d_BufferFlag.NoAlloc]);
 		b.position = p;
 		b.buffer = this;
-		b.allocNext = this.allocHead;
-		this.allocHead = b;
 		return b;
 	}
 	,getFreeVertices: function() {
@@ -19289,8 +19352,6 @@ h3d_impl_ManagedBuffer.prototype = {
 		}
 		b.position = p;
 		b.buffer = this;
-		b.allocNext = this.allocHead;
-		this.allocHead = b;
 		return true;
 	}
 	,freeBuffer: function(b) {
@@ -19328,20 +19389,6 @@ h3d_impl_ManagedBuffer.prototype = {
 		}
 		if(nvert != 0) {
 			throw new js__$Boot_HaxeError("assert");
-		}
-		var cur = this.allocHead;
-		var prev1 = null;
-		while(cur != null) {
-			if(cur == b) {
-				if(prev1 == null) {
-					this.allocHead = b.allocNext;
-				} else {
-					prev1.allocNext = b.allocNext;
-				}
-				break;
-			}
-			prev1 = cur;
-			cur = cur.allocNext;
 		}
 		if(this.freeList.count == this.size && (this.flags & 1 << h3d_BufferFlag.Managed._hx_index) == 0) {
 			this.dispose();
@@ -19493,7 +19540,7 @@ h3d_impl_MemoryManager.prototype = {
 					flags.push(f);
 				}
 			}
-			n.next = new h3d_Buffer(rem,stride,flags,{ fileName : "h3d/impl/MemoryManager.hx", lineNumber : 149, className : "h3d.impl.MemoryManager", methodName : "allocBuffer"});
+			n.next = new h3d_Buffer(rem,stride,flags);
 			return;
 		}
 		if((b.flags & 1 << h3d_BufferFlag.Managed._hx_index) == 0) {
@@ -19548,7 +19595,7 @@ h3d_impl_MemoryManager.prototype = {
 								flags2.push(f1);
 							}
 						}
-						b.next = new h3d_Buffer(total - size,stride,flags2,{ fileName : "h3d/impl/MemoryManager.hx", lineNumber : 189, className : "h3d.impl.MemoryManager", methodName : "allocBuffer"});
+						b.next = new h3d_Buffer(total - size,stride,flags2);
 						return;
 					}
 					m1 = m1.next;
@@ -19740,62 +19787,7 @@ h3d_impl_MemoryManager.prototype = {
 		return { bufferCount : this.bufferCount, freeManagedMemory : free, managedMemory : total, totalMemory : this.usedMemory + this.texMemory, textureCount : this.textures.length, textureMemory : this.texMemory};
 	}
 	,allocStats: function() {
-		var h = new haxe_ds_StringMap();
-		var all = [];
-		var _g = 0;
-		var _g1 = this.textures;
-		while(_g < _g1.length) {
-			var t = _g1[_g];
-			++_g;
-			var key = "$" + t.allocPos.fileName + ":" + t.allocPos.lineNumber;
-			var inf = __map_reserved[key] != null ? h.getReserved(key) : h.h[key];
-			if(inf == null) {
-				inf = { file : t.allocPos.fileName, line : t.allocPos.lineNumber, count : 0, size : 0, tex : true};
-				if(__map_reserved[key] != null) {
-					h.setReserved(key,inf);
-				} else {
-					h.h[key] = inf;
-				}
-				all.push(inf);
-			}
-			inf.count++;
-			inf.size += t.width * t.height * this.bpp(t);
-		}
-		var _g2 = 0;
-		var _g3 = this.buffers;
-		while(_g2 < _g3.length) {
-			var buf = _g3[_g2];
-			++_g2;
-			var buf1 = buf;
-			while(buf1 != null) {
-				var b = buf1.allocHead;
-				while(b != null) {
-					var key1 = b.allocPos == null ? "null" : b.allocPos.fileName + ":" + b.allocPos.lineNumber;
-					var inf1 = __map_reserved[key1] != null ? h.getReserved(key1) : h.h[key1];
-					if(inf1 == null) {
-						inf1 = { file : b.allocPos != null ? b.allocPos.fileName : "", line : b.allocPos != null ? b.allocPos.lineNumber : 0, count : 0, size : 0, tex : false};
-						if(__map_reserved[key1] != null) {
-							h.setReserved(key1,inf1);
-						} else {
-							h.h[key1] = inf1;
-						}
-						all.push(inf1);
-					}
-					inf1.count++;
-					inf1.size += b.vertices * b.buffer.stride * 4;
-					b = b.allocNext;
-				}
-				buf1 = buf1.next;
-			}
-		}
-		all.sort(function(a,b1) {
-			if(a.size == b1.size) {
-				return a.line - b1.line;
-			} else {
-				return b1.size - a.size;
-			}
-		});
-		return all;
+		return [];
 	}
 	,__class__: h3d_impl_MemoryManager
 };
@@ -19874,7 +19866,7 @@ h3d_impl_TextureCache.prototype = {
 		if(isCube) {
 			flags.push(h3d_mat_TextureFlags.Cube);
 		}
-		var newt = new h3d_mat_Texture(width,height,flags,format,{ fileName : "h3d/impl/TextureCache.hx", lineNumber : 62, className : "h3d.impl.TextureCache", methodName : "lookupTarget"});
+		var newt = new h3d_mat_Texture(width,height,flags,format);
 		if(t != null) {
 			this.cache.splice(this.position,0,newt);
 		} else {
@@ -21177,6 +21169,35 @@ h3d_mat_Stencil.prototype = {
 	}
 	,__class__: h3d_mat_Stencil
 };
+var haxe_ds_IntMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
+haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
+haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
+haxe_ds_IntMap.prototype = {
+	remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) {
+			return false;
+		}
+		delete(this.h[key]);
+		return true;
+	}
+	,keys: function() {
+		var a = [];
+		for( var key in this.h ) (this.h.hasOwnProperty(key) ? a.push(key | 0) : null);
+		return HxOverrides.iter(a);
+	}
+	,iterator: function() {
+		return { ref : this.h, it : this.keys(), hasNext : function() {
+			return this.it.hasNext();
+		}, next : function() {
+			var i = this.it.next();
+			return this.ref[i];
+		}};
+	}
+	,__class__: haxe_ds_IntMap
+};
 var hxd_PixelFormat = $hxEnums["hxd.PixelFormat"] = { __ename__ : true, __constructs__ : ["ARGB","BGRA","RGBA","RGBA16F","RGBA32F","R8","R16F","R32F","RG8","RG16F","RG32F","RGB8","RGB16F","RGB32F","SRGB","SRGB_ALPHA","RGB10A2","RG11B10UF","S3TC"]
 	,ARGB: {_hx_index:0,__enum__:"hxd.PixelFormat",toString:$estr}
 	,BGRA: {_hx_index:1,__enum__:"hxd.PixelFormat",toString:$estr}
@@ -21234,7 +21255,6 @@ var h3d_mat_Texture = function(w,h,flags,format,allocPos) {
 	this.set_filter(h3d_mat_Filter.Linear);
 	this.set_wrap(h3d_mat_Wrap.Clamp);
 	this.bits &= 32767;
-	this.allocPos = allocPos;
 	if((this.flags & 1 << h3d_mat_TextureFlags.NoAlloc._hx_index) == 0) {
 		this.alloc();
 	}
@@ -21281,7 +21301,7 @@ h3d_mat_Texture.defaultCubeTexture = function() {
 	if(t != null) {
 		return t;
 	}
-	t = new h3d_mat_Texture(1,1,[h3d_mat_TextureFlags.Cube],null,{ fileName : "h3d/mat/Texture.hx", lineNumber : 406, className : "h3d.mat.Texture", methodName : "defaultCubeTexture"});
+	t = new h3d_mat_Texture(1,1,[h3d_mat_TextureFlags.Cube]);
 	t.clear(2105376);
 	t.realloc = function() {
 		t.clear(2105376);
@@ -21300,7 +21320,7 @@ h3d_mat_Texture.genChecker = function(size) {
 		k = { };
 		h3d_mat_Texture.checkerTextureKeys.h[size] = k;
 	}
-	var t1 = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.NoAlloc],null,{ fileName : "h3d/mat/Texture.hx", lineNumber : 426, className : "h3d.mat.Texture", methodName : "genChecker"});
+	var t1 = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.NoAlloc]);
 	var t2 = t1;
 	var size1 = size;
 	t1.realloc = function() {
@@ -21320,7 +21340,7 @@ h3d_mat_Texture.genNoise = function(size) {
 		k = { };
 		h3d_mat_Texture.noiseTextureKeys.h[size] = k;
 	}
-	var t1 = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.NoAlloc],null,{ fileName : "h3d/mat/Texture.hx", lineNumber : 445, className : "h3d.mat.Texture", methodName : "genNoise"});
+	var t1 = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.NoAlloc]);
 	var t2 = t1;
 	var size1 = size;
 	t1.realloc = function() {
@@ -21444,9 +21464,6 @@ h3d_mat_Texture.prototype = {
 		var str = this.name;
 		if(this.name == null) {
 			str = "Texture_" + this.id;
-			if(this.allocPos != null) {
-				str += "(" + this.allocPos.className + ":" + this.allocPos.lineNumber + ")";
-			}
 		}
 		return str + "(" + this.width + "x" + this.height + ")";
 	}
@@ -21606,9 +21623,6 @@ h3d_mat_Texture.prototype = {
 	,dispose: function() {
 		if(this.t != null) {
 			this.mem.deleteTexture(this);
-			if(this.allocPos != null) {
-				this.allocPos.customParams = ["#DISPOSED"];
-			}
 		}
 	}
 	,swapTexture: function(t) {
@@ -22833,10 +22847,6 @@ h3d_pass_Default.prototype = $extend(h3d_pass_Base.prototype,{
 		}
 	}
 	,log: function(str) {
-		var _this = this.ctx.engine.driver;
-		if(_this.logEnable) {
-			_this.logImpl(str);
-		}
 	}
 	,drawObject: function(p) {
 		this.ctx.drawPass = p;
@@ -23123,7 +23133,7 @@ h3d_pass_Shadows.prototype = $extend(h3d_pass_Default.prototype,{
 		throw new js__$Boot_HaxeError("Not implemented");
 	}
 	,createDefaultShadowMap: function() {
-		var tex = h3d_mat_Texture.fromColor(16777215,null,{ fileName : "h3d/pass/Shadows.hx", lineNumber : 102, className : "h3d.pass.Shadows", methodName : "createDefaultShadowMap"});
+		var tex = h3d_mat_Texture.fromColor(16777215);
 		tex.name = "defaultShadowMap";
 		return tex;
 	}
@@ -23815,7 +23825,7 @@ h3d_pass_DirShadowMap.prototype = $extend(h3d_pass_Shadows.prototype,{
 		if(this.staticTexture != null) {
 			this.staticTexture.dispose();
 		}
-		this.staticTexture = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.Target],this.format,{ fileName : "h3d/pass/DirShadowMap.hx", lineNumber : 184, className : "h3d.pass.DirShadowMap", methodName : "loadStaticData"});
+		this.staticTexture = new h3d_mat_Texture(size,size,[h3d_mat_TextureFlags.Target],this.format);
 		this.staticTexture.uploadPixels(pixels);
 		this.staticTexture.name = "staticTexture";
 		this.staticTexture.realloc = null;
@@ -23920,7 +23930,7 @@ h3d_pass_DirShadowMap.prototype = $extend(h3d_pass_Shadows.prototype,{
 		if(this.staticTexture != null) {
 			this.staticTexture.dispose();
 		}
-		this.staticTexture = texture.clone({ fileName : "h3d/pass/DirShadowMap.hx", lineNumber : 252, className : "h3d.pass.DirShadowMap", methodName : "computeStatic"});
+		this.staticTexture = texture.clone();
 		var _this = this.dshader;
 		_this.constModified = true;
 		_this.shadowMap__ = this.staticTexture;
@@ -24017,7 +24027,7 @@ var h3d_pass_HardwarePick = function() {
 	_this.set_blendAlphaSrc(src);
 	_this.set_blendDst(dst);
 	_this.set_blendAlphaDst(dst);
-	this.texOut = new h3d_mat_Texture(3,3,[h3d_mat_TextureFlags.Target],null,{ fileName : "h3d/pass/HardwarePick.hx", lineNumber : 37, className : "h3d.pass.HardwarePick", methodName : "new"});
+	this.texOut = new h3d_mat_Texture(3,3,[h3d_mat_TextureFlags.Target]);
 	this.texOut.depthBuffer = new h3d_mat_DepthBuffer(3,3);
 };
 $hxClasses["h3d.pass.HardwarePick"] = h3d_pass_HardwarePick;
@@ -25127,7 +25137,6 @@ var h3d_prim_BigPrimitive = function(stride,isRaw,pos) {
 	if(stride < 3) {
 		throw new js__$Boot_HaxeError("Minimum stride = 3");
 	}
-	this.allocPos = pos;
 };
 $hxClasses["h3d.prim.BigPrimitive"] = h3d_prim_BigPrimitive;
 h3d_prim_BigPrimitive.__name__ = "h3d.prim.BigPrimitive";
@@ -25282,7 +25291,7 @@ h3d_prim_BigPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
 		if(this.tmpBuf != null) {
 			if(this.bufPos > 0 && this.idxPos > 0) {
 				this.flushing = true;
-				var b = h3d_Buffer.ofSubFloats(this.tmpBuf,this.stride,this.bufPos / this.stride | 0,null,this.allocPos);
+				var b = h3d_Buffer.ofSubFloats(this.tmpBuf,this.stride,this.bufPos / this.stride | 0);
 				if(this.isRaw) {
 					b.flags |= 1 << h3d_BufferFlag.RawFormat._hx_index;
 				}
@@ -25730,7 +25739,7 @@ h3d_prim_HMDModel.prototype = $extend(h3d_prim_MeshPrimitive.prototype,{
 	}
 	,alloc: function(engine) {
 		this.dispose();
-		this.buffer = new h3d_Buffer(this.data.vertexCount,this.data.vertexStride,null,{ fileName : "h3d/prim/HMDModel.hx", lineNumber : 51, className : "h3d.prim.HMDModel", methodName : "alloc"});
+		this.buffer = new h3d_Buffer(this.data.vertexCount,this.data.vertexStride);
 		var entry = this.lib.resource.entry;
 		entry.open();
 		entry.skip(this.dataPosition + this.data.vertexPosition);
@@ -25864,7 +25873,7 @@ h3d_prim_HMDModel.prototype = $extend(h3d_prim_MeshPrimitive.prototype,{
 			}
 			v.array[v.pos++] = v3;
 		}
-		var buf = h3d_Buffer.ofFloats(v,3,null,{ fileName : "h3d/prim/HMDModel.hx", lineNumber : 134, className : "h3d.prim.HMDModel", methodName : "recomputeNormals"});
+		var buf = h3d_Buffer.ofFloats(v,3);
 		this.addBuffer(name,buf,0);
 		this.normalsRecomputed = name;
 	}
@@ -26097,7 +26106,7 @@ h3d_prim_Plane2D.prototype = $extend(h3d_prim_Primitive.prototype,{
 			v.array = newArray15;
 		}
 		v.array[v.pos++] = 0;
-		this.buffer = h3d_Buffer.ofFloats(v,4,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat],{ fileName : "h3d/prim/Plane2D.hx", lineNumber : 38, className : "h3d.prim.Plane2D", methodName : "alloc"});
+		this.buffer = h3d_Buffer.ofFloats(v,4,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
 	}
 	,render: function(engine) {
 		if(this.buffer == null || this.buffer.isDisposed()) {
@@ -26354,7 +26363,7 @@ h3d_prim_Polygon.prototype = $extend(h3d_prim_MeshPrimitive.prototype,{
 		if(this.normals == null || this.tangents != null) {
 			flags.push(h3d_BufferFlag.RawFormat);
 		}
-		this.buffer = h3d_Buffer.ofFloats(buf,size,flags,{ fileName : "h3d/prim/Polygon.hx", lineNumber : 89, className : "h3d.prim.Polygon", methodName : "alloc"});
+		this.buffer = h3d_Buffer.ofFloats(buf,size,flags);
 		var _g2 = 0;
 		var _g3 = names.length;
 		while(_g2 < _g3) {
@@ -26751,7 +26760,7 @@ h3d_prim_RawPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
 		if(inf.stride < 8) {
 			flags.push(h3d_BufferFlag.RawFormat);
 		}
-		this.buffer = h3d_Buffer.ofFloats(inf.vbuf,inf.stride,flags,{ fileName : "h3d/prim/RawPrimitive.hx", lineNumber : 23, className : "h3d.prim.RawPrimitive", methodName : "alloc"});
+		this.buffer = h3d_Buffer.ofFloats(inf.vbuf,inf.stride,flags);
 		this.vcount = this.buffer.vertices;
 		this.tcount = inf.ibuf != null ? inf.ibuf.length / 3 | 0 : inf.quads ? this.vcount >> 1 : this.vcount / 3 | 0;
 		if(inf.ibuf != null) {
@@ -27325,9 +27334,6 @@ h3d_scene_Object.prototype = {
 	,clone: function(o) {
 		if(o == null) {
 			o = new h3d_scene_Object();
-		}
-		if(js_Boot.getClass(o) != js_Boot.getClass(this)) {
-			throw new js__$Boot_HaxeError(Std.string(this) + " is missing clone()");
 		}
 		var v = this.x;
 		o.x = v;
@@ -28385,7 +28391,7 @@ var h3d_scene_Graphics = function(parent) {
 	this.curZ = 0.;
 	this.curY = 0.;
 	this.curX = 0.;
-	this.bprim = new h3d_prim_BigPrimitive(12,null,{ fileName : "h3d/scene/Graphics.hx", lineNumber : 43, className : "h3d.scene.Graphics", methodName : "new"});
+	this.bprim = new h3d_prim_BigPrimitive(12);
 	this.bprim.isStatic = false;
 	h3d_scene_Mesh.call(this,this.bprim,null,parent);
 	this.tmpPoints = [];
@@ -29614,7 +29620,6 @@ var h3d_scene_Scene = function(createRenderer,createLightSystem) {
 	if(createRenderer == null) {
 		createRenderer = true;
 	}
-	this.checkPasses = true;
 	h3d_scene_Object.call(this,null);
 	this.window = hxd_Window.getInstance();
 	this.eventListeners = [];
@@ -30160,7 +30165,7 @@ h3d_scene_Scene.prototype = $extend(h3d_scene_Object.prototype,{
 				this.hardwarePass = p;
 			}
 			var _this = this.ctx;
-			var value = { texture : h3d_mat_Texture.fromColor(267386880,0,{ fileName : "h3d/scene/Scene.hx", lineNumber : 316, className : "h3d.scene.Scene", methodName : "hardwarePick"})};
+			var value = { texture : h3d_mat_Texture.fromColor(267386880,0)};
 			_this.setGlobalID(hxsl_Globals.allocID("depthMap"),value);
 			p.pickX = pixelX;
 			p.pickY = pixelY;
@@ -30327,16 +30332,6 @@ h3d_scene_Scene.prototype = $extend(h3d_scene_Object.prototype,{
 			this.lightSystem.initLights(this.ctx);
 		}
 		this.renderer.process(passes);
-		if(!this.ctx.computingStatic && this.checkPasses) {
-			var _g2 = 0;
-			while(_g2 < passes.length) {
-				var p2 = passes[_g2];
-				++_g2;
-				if(!p2.rendered) {
-					haxe_Log.trace("Pass " + p2.name + " has not been rendered : don't know how to handle.",{ fileName : "h3d/scene/Scene.hx", lineNumber : 438, className : "h3d.scene.Scene", methodName : "render"});
-				}
-			}
-		}
 		if(this.camera.rightHanded) {
 			engine.driver.setRenderFlag(h3d_impl_RenderFlag.CameraHandness,0);
 		}
@@ -30344,13 +30339,13 @@ h3d_scene_Scene.prototype = $extend(h3d_scene_Object.prototype,{
 		this.ctx.scene = null;
 		this.ctx.camera = null;
 		this.ctx.engine = null;
-		var _g3 = 0;
+		var _g2 = 0;
 		var _g11 = passIndex;
-		while(_g3 < _g11) {
-			var i1 = _g3++;
-			var p3 = this.ctx.cachedPassObjects[i1];
-			p3.name = null;
-			var _this1 = p3.passes;
+		while(_g2 < _g11) {
+			var i1 = _g2++;
+			var p2 = this.ctx.cachedPassObjects[i1];
+			p2.name = null;
+			var _this1 = p2.passes;
 			_this1.current = null;
 			_this1.discarded = _this1.lastDisc = null;
 		}
@@ -32828,10 +32823,6 @@ h3d_shader_VolumeDecal.prototype = $extend(hxsl_Shader.prototype,{
 	}
 	,__class__: h3d_shader_VolumeDecal
 });
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
 var haxe_EntryPoint = function() { };
 $hxClasses["haxe.EntryPoint"] = haxe_EntryPoint;
 haxe_EntryPoint.__name__ = "haxe.EntryPoint";
@@ -34188,35 +34179,6 @@ haxe_ds_EnumValueMap.prototype = $extend(haxe_ds_BalancedTree.prototype,{
 	}
 	,__class__: haxe_ds_EnumValueMap
 });
-var haxe_ds_IntMap = function() {
-	this.h = { };
-};
-$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
-haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
-haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
-haxe_ds_IntMap.prototype = {
-	remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) {
-			return false;
-		}
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) (this.h.hasOwnProperty(key) ? a.push(key | 0) : null);
-		return HxOverrides.iter(a);
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref[i];
-		}};
-	}
-	,__class__: haxe_ds_IntMap
-};
 var haxe_ds_List = function() {
 	this.length = 0;
 };
@@ -34330,69 +34292,6 @@ haxe_ds__$StringMap_StringMapIterator.prototype = {
 		}
 	}
 	,__class__: haxe_ds__$StringMap_StringMapIterator
-};
-var haxe_ds_StringMap = function() {
-	this.h = { };
-};
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.prototype = {
-	setReserved: function(key,value) {
-		if(this.rh == null) {
-			this.rh = { };
-		}
-		this.rh["$" + key] = value;
-	}
-	,getReserved: function(key) {
-		if(this.rh == null) {
-			return null;
-		} else {
-			return this.rh["$" + key];
-		}
-	}
-	,existsReserved: function(key) {
-		if(this.rh == null) {
-			return false;
-		}
-		return this.rh.hasOwnProperty("$" + key);
-	}
-	,remove: function(key) {
-		if(__map_reserved[key] != null) {
-			key = "$" + key;
-			if(this.rh == null || !this.rh.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.rh[key]);
-			return true;
-		} else {
-			if(!this.h.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.h[key]);
-			return true;
-		}
-	}
-	,keys: function() {
-		return HxOverrides.iter(this.arrayKeys());
-	}
-	,arrayKeys: function() {
-		var out = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) {
-			out.push(key);
-		}
-		}
-		if(this.rh != null) {
-			for( var key in this.rh ) {
-			if(key.charCodeAt(0) == 36) {
-				out.push(key.substr(1));
-			}
-			}
-		}
-		return out;
-	}
-	,__class__: haxe_ds_StringMap
 };
 var haxe_ds__$Vector_Vector_$Impl_$ = {};
 $hxClasses["haxe.ds._Vector.Vector_Impl_"] = haxe_ds__$Vector_Vector_$Impl_$;
@@ -37603,6 +37502,26 @@ var hxd_SystemValue = $hxEnums["hxd.SystemValue"] = { __ename__ : true, __constr
 	,IsMobile: {_hx_index:2,__enum__:"hxd.SystemValue",toString:$estr}
 };
 hxd_SystemValue.__empty_constructs__ = [hxd_SystemValue.IsTouch,hxd_SystemValue.IsWindowed,hxd_SystemValue.IsMobile];
+var js__$Boot_HaxeError = function(val) {
+	Error.call(this);
+	this.val = val;
+	if(Error.captureStackTrace) {
+		Error.captureStackTrace(this,js__$Boot_HaxeError);
+	}
+};
+$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
+js__$Boot_HaxeError.__name__ = "js._Boot.HaxeError";
+js__$Boot_HaxeError.wrap = function(val) {
+	if(((val) instanceof Error)) {
+		return val;
+	} else {
+		return new js__$Boot_HaxeError(val);
+	}
+};
+js__$Boot_HaxeError.__super__ = Error;
+js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
+	__class__: js__$Boot_HaxeError
+});
 var hxd_Timer = function() { };
 $hxClasses["hxd.Timer"] = hxd_Timer;
 hxd_Timer.__name__ = "hxd.Timer";
@@ -38792,7 +38711,7 @@ hxd_fmt_hmd_Library.prototype = {
 		if(m.diffuseTexture != null) {
 			mat.set_texture(loadTexture(m.diffuseTexture));
 			if(mat.get_texture() == null) {
-				mat.set_texture(h3d_mat_Texture.fromColor(16711935,null,{ fileName : "hxd/fmt/hmd/Library.hx", lineNumber : 268, className : "hxd.fmt.hmd.Library", methodName : "makeMaterial"}));
+				mat.set_texture(h3d_mat_Texture.fromColor(16711935));
 			}
 		}
 		if(m.specularTexture != null) {
@@ -38910,7 +38829,7 @@ hxd_fmt_hmd_Library.prototype = {
 	,makeObject: function(loadTexture) {
 		if(loadTexture == null) {
 			loadTexture = function(_) {
-				return h3d_mat_Texture.fromColor(16711935,null,{ fileName : "hxd/fmt/hmd/Library.hx", lineNumber : 337, className : "hxd.fmt.hmd.Library", methodName : "makeObject"});
+				return h3d_mat_Texture.fromColor(16711935);
 			};
 		}
 		if(this.header.models.length == 0) {
@@ -40509,7 +40428,7 @@ hxd_res_Image.prototype = $extend(hxd_res_Resource.prototype,{
 		if(this.inf.format == 4) {
 			format = hxd_PixelFormat.S3TC(this.inf.bc);
 		}
-		this.tex = new h3d_mat_Texture(width,height,[h3d_mat_TextureFlags.NoAlloc],format,{ fileName : "hxd/res/Image.hx", lineNumber : 334, className : "hxd.res.Image", methodName : "toTexture"});
+		this.tex = new h3d_mat_Texture(width,height,[h3d_mat_TextureFlags.NoAlloc],format);
 		if(hxd_res_Image.DEFAULT_FILTER != h3d_mat_Filter.Linear) {
 			this.tex.set_filter(hxd_res_Image.DEFAULT_FILTER);
 		}
@@ -40739,14 +40658,8 @@ hxd_res_NanoJpeg.prototype = {
 		this.pos += count;
 		this.size -= count;
 		this.length -= count;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,syntax: function(flag) {
-		if(flag) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,get: function(p) {
 		return this.bytes.b[this.pos + p];
@@ -40773,9 +40686,6 @@ hxd_res_NanoJpeg.prototype = {
 			this.bufbits += 8;
 			this.buf = this.buf << 8 | newbyte;
 			if(newbyte == 255) {
-				if(this.size == 0) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				var marker = this.bytes.b[this.pos];
 				this.pos++;
 				this.size--;
@@ -40786,9 +40696,6 @@ hxd_res_NanoJpeg.prototype = {
 				case 0:case 255:
 					break;
 				default:
-					if((marker & 248) != 208) {
-						throw new js__$Boot_HaxeError("Invalid JPEG file");
-					}
 					this.buf = this.buf << 8 | marker;
 					this.bufbits += 8;
 				}
@@ -40808,59 +40715,26 @@ hxd_res_NanoJpeg.prototype = {
 		return r;
 	}
 	,njDecodeLength: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,njSkipMarker: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		var count = this.length;
 		this.pos += count;
 		this.size -= count;
 		this.length -= count;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,njDecodeSOF: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
-		if(this.length < 9) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		if(this.bytes.b[this.pos] != 8) {
 			this.notSupported();
 		}
@@ -40870,17 +40744,11 @@ hxd_res_NanoJpeg.prototype = {
 		this.pos += 6;
 		this.size -= 6;
 		this.length -= 6;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		switch(this.ncomp) {
 		case 1:case 3:
 			break;
 		default:
 			this.notSupported();
-		}
-		if(this.length < this.ncomp * 3) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
 		}
 		var ssxmax = 0;
 		var ssymax = 0;
@@ -40891,29 +40759,17 @@ hxd_res_NanoJpeg.prototype = {
 			var c = this.comps[i];
 			c.cid = this.bytes.b[this.pos];
 			c.ssx = this.bytes.b[this.pos + 1] >> 4;
-			if(c.ssx == 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			if((c.ssx & c.ssx - 1) != 0) {
 				this.notSupported();
 			}
 			c.ssy = this.bytes.b[this.pos + 1] & 15;
-			if(c.ssy == 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			if((c.ssy & c.ssy - 1) != 0) {
 				this.notSupported();
 			}
 			c.qtsel = this.bytes.b[this.pos + 2];
-			if((c.qtsel & 252) != 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			this.pos += 3;
 			this.size -= 3;
 			this.length -= 3;
-			if(this.size < 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			this.qtused |= 1 << c.qtsel;
 			if(c.ssx > ssxmax) {
 				ssxmax = c.ssx;
@@ -40950,29 +40806,14 @@ hxd_res_NanoJpeg.prototype = {
 		this.pos += count;
 		this.size -= count;
 		this.length -= count;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,njDecodeDQT: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		while(this.length >= 65) {
 			var i = this.bytes.b[this.pos];
-			if((i & 252) != 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			this.qtavail |= 1 << i;
 			var t = this.qtab[i];
 			var _g = 0;
@@ -40983,33 +40824,15 @@ hxd_res_NanoJpeg.prototype = {
 			this.pos += 65;
 			this.size -= 65;
 			this.length -= 65;
-			if(this.size < 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
-		}
-		if(this.length != 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
 		}
 	}
 	,njDecodeDHT: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		while(this.length >= 17) {
 			var i = this.bytes.b[this.pos];
-			if((i & 236) != 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			i = i >> 4 & 1 | (i & 3) << 1;
 			this.counts[0] = this.bytes.b[this.pos + 1];
 			this.counts[1] = this.bytes.b[this.pos + 2];
@@ -41030,9 +40853,6 @@ hxd_res_NanoJpeg.prototype = {
 			this.pos += 17;
 			this.size -= 17;
 			this.length -= 17;
-			if(this.size < 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			var vlc = this.vlctab[i];
 			var vpos = 0;
 			var remain = 65536;
@@ -41045,13 +40865,7 @@ hxd_res_NanoJpeg.prototype = {
 				if(currcnt == 0) {
 					continue;
 				}
-				if(this.length < currcnt) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				remain -= currcnt << 16 - codelen;
-				if(remain < 0) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				var _g1 = 0;
 				var _g11 = currcnt;
 				while(_g1 < _g11) {
@@ -41068,51 +40882,27 @@ hxd_res_NanoJpeg.prototype = {
 				this.pos += currcnt;
 				this.size -= currcnt;
 				this.length -= currcnt;
-				if(this.size < 0) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 			}
 			while(remain-- != 0) {
 				vlc.b[vpos] = 0;
 				vpos += 2;
 			}
 		}
-		if(this.length != 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,njDecodeDRI: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
-		if(this.length < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.rstinterval = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
 		var count = this.length;
 		this.pos += count;
 		this.size -= count;
 		this.length -= count;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 	}
 	,njGetVLC: function(vlc) {
 		var value = this.njShowBits(16);
 		var bits = vlc.b[value << 1];
-		if(bits == 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		if(this.bufbits < bits) {
 			this.njShowBits(bits);
 		}
@@ -41271,9 +41061,6 @@ hxd_res_NanoJpeg.prototype = {
 		var vlc = this.vlctab[c.dctabsel];
 		var value1 = this.njShowBits(16);
 		var bits = vlc.b[value1 << 1];
-		if(bits == 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		if(this.bufbits < bits) {
 			this.njShowBits(bits);
 		}
@@ -41300,9 +41087,6 @@ hxd_res_NanoJpeg.prototype = {
 		while(true) {
 			var value2 = this.njShowBits(16);
 			var bits1 = at.b[value2 << 1];
-			if(bits1 == 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			if(this.bufbits < bits1) {
 				this.njShowBits(bits1);
 			}
@@ -41324,13 +41108,7 @@ hxd_res_NanoJpeg.prototype = {
 			if(this.vlcCode == 0) {
 				break;
 			}
-			if((this.vlcCode & 15) == 0 && this.vlcCode != 240) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			coef += (this.vlcCode >> 4) + 1;
-			if(coef > 63) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			this.block[this.njZZ[coef]] = value * qt[coef];
 			if(!(coef < 63)) {
 				break;
@@ -42365,50 +42143,26 @@ hxd_res_NanoJpeg.prototype = {
 		throw new js__$Boot_HaxeError("This JPG file is not supported");
 	}
 	,njDecodeScan: function() {
-		if(this.size < 2) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-		if(this.length > this.size) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
-		if(this.length < 4 + 2 * this.ncomp) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		if(this.bytes.b[this.pos] != this.ncomp) {
 			this.notSupported();
 		}
 		this.pos += 1;
 		this.size -= 1;
 		this.length -= 1;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		var _g = 0;
 		var _g1 = this.ncomp;
 		while(_g < _g1) {
 			var i = _g++;
 			var c = this.comps[i];
-			if(this.bytes.b[this.pos] != c.cid) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
-			if((this.bytes.b[this.pos + 1] & 236) != 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			c.dctabsel = this.bytes.b[this.pos + 1] >> 4 << 1;
 			c.actabsel = (this.bytes.b[this.pos + 1] & 3) << 1 | 1;
 			this.pos += 2;
 			this.size -= 2;
 			this.length -= 2;
-			if(this.size < 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 		}
 		var start = this.bytes.b[this.pos];
 		var count = this.bytes.b[this.pos + 1];
@@ -42420,9 +42174,6 @@ hxd_res_NanoJpeg.prototype = {
 		this.pos += count1;
 		this.size -= count1;
 		this.length -= count1;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		var mbx = 0;
 		var mby = 0;
 		var rstcount = this.rstinterval;
@@ -42456,9 +42207,6 @@ hxd_res_NanoJpeg.prototype = {
 				var r = this.njShowBits(16);
 				this.bufbits -= 16;
 				var i2 = r;
-				if((i2 & 65528) != 65488 || (i2 & 7) != nextrst) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				nextrst = nextrst + 1 & 7;
 				rstcount = this.rstinterval;
 				this.comps[0].dcpred = 0;
@@ -42672,19 +42420,10 @@ hxd_res_NanoJpeg.prototype = {
 		this.pos += 2;
 		this.size -= 2;
 		this.length -= 2;
-		if(this.size < 0) {
-			throw new js__$Boot_HaxeError("Invalid JPEG file");
-		}
 		_hx_loop1: while(true) {
-			if(this.size < 2 || this.bytes.b[this.pos] != 255) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			this.pos += 2;
 			this.size -= 2;
 			this.length -= 2;
-			if(this.size < 0) {
-				throw new js__$Boot_HaxeError("Invalid JPEG file");
-			}
 			switch(this.bytes.b[this.pos + (-1)]) {
 			case 192:
 				this.njDecodeSOF();
@@ -42723,52 +42462,28 @@ hxd_res_NanoJpeg.prototype = {
 				this.njDecodeDRI();
 				break;
 			case 254:
-				if(this.size < 2) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-				if(this.length > this.size) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				this.pos += 2;
 				this.size -= 2;
 				this.length -= 2;
-				if(this.size < 0) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				var count = this.length;
 				this.pos += count;
 				this.size -= count;
 				this.length -= count;
-				if(this.size < 0) {
-					throw new js__$Boot_HaxeError("Invalid JPEG file");
-				}
 				break;
 			default:
 				switch(this.bytes.b[this.pos + (-1)] & 240) {
 				case 192:
 					throw new js__$Boot_HaxeError("Unsupported jpeg type " + (this.bytes.b[this.pos + (-1)] & 15));
 				case 224:
-					if(this.size < 2) {
-						throw new js__$Boot_HaxeError("Invalid JPEG file");
-					}
 					this.length = this.bytes.b[this.pos] << 8 | this.bytes.b[this.pos + 1];
-					if(this.length > this.size) {
-						throw new js__$Boot_HaxeError("Invalid JPEG file");
-					}
 					this.pos += 2;
 					this.size -= 2;
 					this.length -= 2;
-					if(this.size < 0) {
-						throw new js__$Boot_HaxeError("Invalid JPEG file");
-					}
 					var count1 = this.length;
 					this.pos += count1;
 					this.size -= count1;
 					this.length -= count1;
-					if(this.size < 0) {
-						throw new js__$Boot_HaxeError("Invalid JPEG file");
-					}
 					break;
 				default:
 					throw new js__$Boot_HaxeError("Unsupported jpeg tag 0x" + StringTools.hex(this.bytes.b[this.pos + (-1)],2));
@@ -43666,7 +43381,6 @@ hxd_snd_Manager.prototype = {
 			c.duration = c.sound.getData().get_duration();
 			var playedSamples = this.driver.getPlayedSampleCount(s.handle);
 			if(playedSamples < 0) {
-				haxe_Log.trace("playedSamples should positive : bug in driver",{ fileName : "hxd/snd/Manager.hx", lineNumber : 338, className : "hxd.snd.Manager", methodName : "update"});
 				playedSamples = 0;
 			}
 			c.set_position((s.start + playedSamples) / s.buffers[0].sampleRate);
@@ -46698,123 +46412,105 @@ hxsl_Cache.prototype = {
 		haxe_ds_ArraySort.sort(shaderDatas,function(s11,s2) {
 			return s2.p - s11.p;
 		});
-		var _g1 = 0;
-		while(_g1 < shaderDatas.length) {
-			var s3 = shaderDatas[_g1];
-			++_g1;
-			hxsl_Printer.check(s3.inst.shader);
-		}
 		var linker = new hxsl_Linker(batchMode);
-		var s4;
+		var s3;
 		try {
-			var _g2 = [];
-			var _g3 = 0;
-			while(_g3 < shaderDatas.length) {
-				var s5 = shaderDatas[_g3];
-				++_g3;
-				_g2.push(s5.inst.shader);
+			var _g1 = [];
+			var _g2 = 0;
+			while(_g2 < shaderDatas.length) {
+				var s4 = shaderDatas[_g2];
+				++_g2;
+				_g1.push(s4.inst.shader);
 			}
-			s4 = linker.link(_g2);
+			s3 = linker.link(_g1);
 		} catch( e ) {
 			var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
 			if(((e1) instanceof hxsl_Error)) {
 				var e2 = e1;
-				var _g21 = [];
-				var _g31 = 0;
-				while(_g31 < shaderDatas.length) {
-					var s6 = shaderDatas[_g31];
-					++_g31;
-					_g21.push(hxsl_Printer.shaderToString(s6.inst.shader));
+				var _g11 = [];
+				var _g21 = 0;
+				while(_g21 < shaderDatas.length) {
+					var s5 = shaderDatas[_g21];
+					++_g21;
+					_g11.push(hxsl_Printer.shaderToString(s5.inst.shader));
 				}
-				var shaders1 = _g21;
+				var shaders1 = _g11;
 				e2.msg += "\n\nin\n\n" + shaders1.join("\n-----\n");
 				throw new js__$Boot_HaxeError(e2);
 			} else {
 				throw e;
 			}
 		}
-		var _g22 = [];
-		var _g32 = 0;
-		while(_g32 < shaderDatas.length) {
-			var s7 = shaderDatas[_g32];
-			++_g32;
-			_g22.push(s7.inst.shader);
-		}
-		hxsl_Printer.check(s4,_g22);
 		var paramVars = new haxe_ds_IntMap();
-		var _g4 = 0;
-		var _g5 = linker.allVars;
-		while(_g4 < _g5.length) {
-			var v = _g5[_g4];
-			++_g4;
+		var _g12 = 0;
+		var _g22 = linker.allVars;
+		while(_g12 < _g22.length) {
+			var v = _g22[_g12];
+			++_g12;
 			if(v.v.kind == hxsl_VarKind.Param) {
-				var _g41 = v.v.type;
-				if(_g41._hx_index == 13) {
-					var _g51 = _g41.vl;
+				var _g13 = v.v.type;
+				if(_g13._hx_index == 13) {
+					var _g23 = _g13.vl;
 					continue;
 				}
 				var inf = shaderDatas[v.instanceIndex];
 				paramVars.h[v.id] = { instance : inf.index, index : inf.inst.params.h[v.merged[0].id]};
 			}
 		}
-		var prev = s4;
-		var s8;
+		var prev = s3;
+		var s6;
 		try {
-			s8 = new hxsl_Splitter().split(s4);
+			s6 = new hxsl_Splitter().split(s3);
 		} catch( e3 ) {
 			var e4 = ((e3) instanceof js__$Boot_HaxeError) ? e3.val : e3;
 			if(((e4) instanceof hxsl_Error)) {
 				var e5 = e4;
-				e5.msg += "\n\nin\n\n" + hxsl_Printer.shaderToString(s4);
+				e5.msg += "\n\nin\n\n" + hxsl_Printer.shaderToString(s3);
 				throw new js__$Boot_HaxeError(e5);
 			} else {
 				throw e3;
 			}
 		}
 		if(batchMode) {
-			var _g6 = 0;
-			var _g7 = s8.vertex.vars;
-			while(_g6 < _g7.length) {
-				var v1 = _g7[_g6];
-				++_g6;
+			var _g3 = 0;
+			var _g4 = s6.vertex.vars;
+			while(_g3 < _g4.length) {
+				var v1 = _g4[_g3];
+				++_g3;
 				if(v1.qualifiers != null && v1.qualifiers.indexOf(hxsl_VarQualifier.PerObject) >= 0) {
 					v1.kind = hxsl_VarKind.Local;
 				}
 			}
 		}
-		hxsl_Printer.check(s8.vertex,[prev]);
-		hxsl_Printer.check(s8.fragment,[prev]);
-		var prev1 = s8;
-		var s9 = new hxsl_Dce().dce(s8.vertex,s8.fragment);
-		hxsl_Printer.check(s9.vertex,[prev1.vertex]);
-		hxsl_Printer.check(s9.fragment,[prev1.fragment]);
-		var r = this.buildRuntimeShader(s9.vertex,s9.fragment,paramVars);
-		var _g61 = [];
-		var _g7_l = shaders;
-		var _g7_last = null;
-		while(_g7_l != _g7_last) {
-			var s10 = _g7_l.s;
-			_g7_l = _g7_l.next;
-			var s12 = s10;
-			_g61.push(new hxsl_ShaderInstanceDesc(s12.shader,s12.constBits));
+		var prev1 = s6;
+		var s7 = new hxsl_Dce().dce(s6.vertex,s6.fragment);
+		var r = this.buildRuntimeShader(s7.vertex,s7.fragment,paramVars);
+		var _g31 = [];
+		var _g4_l = shaders;
+		var _g4_last = null;
+		while(_g4_l != _g4_last) {
+			var s8 = _g4_l.s;
+			_g4_l = _g4_l.next;
+			var s9 = s8;
+			_g31.push(new hxsl_ShaderInstanceDesc(s9.shader,s9.constBits));
 		}
-		r.spec = { instances : _g61, signature : null};
+		r.spec = { instances : _g31, signature : null};
+		var _g5 = 0;
+		var _g6 = shaderDatas.length;
+		while(_g5 < _g6) {
+			var i1 = _g5++;
+			var s10 = shaderDatas[shaderDatas.length - 1 - i1];
+			r.spec.instances[s10.index].index = i1;
+		}
+		var _g7 = [];
 		var _g8 = 0;
-		var _g9 = shaderDatas.length;
-		while(_g8 < _g9) {
-			var i1 = _g8++;
-			var s13 = shaderDatas[shaderDatas.length - 1 - i1];
-			r.spec.instances[s13.index].index = i1;
+		var _g9 = r.spec.instances;
+		while(_g8 < _g9.length) {
+			var i2 = _g9[_g8];
+			++_g8;
+			_g7.push(i2.shader.data.name + "_" + i2.bits + "_" + i2.index);
 		}
-		var _g10 = [];
-		var _g11 = 0;
-		var _g12 = r.spec.instances;
-		while(_g11 < _g12.length) {
-			var i2 = _g12[_g11];
-			++_g11;
-			_g10.push(i2.shader.data.name + "_" + i2.bits + "_" + i2.index);
-		}
-		var signParts = _g10;
+		var signParts = _g7;
 		var tmp = signParts.join(":");
 		r.spec.signature = haxe_crypto_Md5.encode(tmp);
 		r.signature = haxe_crypto_Md5.encode(hxsl_Printer.shaderToString(r.vertex.data) + hxsl_Printer.shaderToString(r.fragment.data));
@@ -46843,8 +46539,6 @@ hxsl_Cache.prototype = {
 		r.globals = new haxe_ds_IntMap();
 		this.initGlobals(r,r.vertex);
 		this.initGlobals(r,r.fragment);
-		hxsl_Printer.check(r.vertex.data,[vertex]);
-		hxsl_Printer.check(r.fragment.data,[fragment]);
 		return r;
 	}
 	,initGlobals: function(r,s) {
@@ -55313,7 +55007,6 @@ hxsl_SharedShader.prototype = {
 		$eval.inlineCalls = true;
 		$eval.unrollLoops = hxsl_SharedShader.UNROLL_LOOPS;
 		var i = new hxsl_ShaderInstance($eval.eval(this.data));
-		hxsl_Printer.check(i.shader,[this.data]);
 		this.paramsCount = 0;
 		var _g2 = 0;
 		var _g11 = this.data.vars;
@@ -55812,26 +55505,6 @@ hxsl_ChannelTools.__name__ = "hxsl.ChannelTools";
 hxsl_ChannelTools.isPackedFormat = function(c) {
 	return c.format == h3d_mat_Texture.nativeFormat;
 };
-var js__$Boot_HaxeError = function(val) {
-	Error.call(this);
-	this.val = val;
-	if(Error.captureStackTrace) {
-		Error.captureStackTrace(this,js__$Boot_HaxeError);
-	}
-};
-$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
-js__$Boot_HaxeError.__name__ = "js._Boot.HaxeError";
-js__$Boot_HaxeError.wrap = function(val) {
-	if(((val) instanceof Error)) {
-		return val;
-	} else {
-		return new js__$Boot_HaxeError(val);
-	}
-};
-js__$Boot_HaxeError.__super__ = Error;
-js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	__class__: js__$Boot_HaxeError
-});
 var js_html__$CanvasElement_CanvasUtil = function() { };
 $hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
 js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
@@ -55865,14 +55538,14 @@ var Float = Number;
 var Bool = Boolean;
 var Class = { };
 var Enum = { };
+var __map_reserved = {};
 haxe_Resource.content = [{ name : "R_two_png", data : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAGpJREFUSIljlKrf+Z+BhoCJloaPWjBCLGAhVuHTBjc4W7phF3UteNrghmIoOh8fICqISHExWRZQAki2gJTgIcsCUgFJFpDqepIsIMdwBgYGBkZiimvkPAADxFpGlAWUgMEVyaMWjFqAFQAA8I8dem3RjCkAAAAASUVORK5CYII"},{ name : "R_blank_png", data : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAD5JREFUSIljjI2N/c9AQ8DCwMDAYGBgQBPDL1y4wMBEE5ORwKgFoxaMWjBqwagFoxaMWjA4LGBhYIDU/rQCAARwB7qi8uhnAAAAAElFTkSuQmCC"},{ name : "R_mann_png", data : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAASFJREFUSInFlC1ywzAQhZ87PUNID2BsEGCUkPBiIyPlAOkx0gPEKMi4vCRGBQHBnjEtySW2oKMZRdL+xAF5SCPtfm93JRt4plarD3qU8aLBcybSmdnAaqyZmAwk2DDsi1kGWqI1Rg3gRmCBA5kOxqNTLy6Ea/HZEYVJIazpJzT9hMPvO3HxJgMAN5Bh2BdNP0mFsiav8UbZdoWHx5XmdNpcxXP2oizwWNu3r4THjigXPEcqxNoJV5CpytBk/b0AcDt7qdu7xhC/lNPmqo4yeUUWeNl2fk/NM3UQwz3Yr8u2Yzl3/67Dqi0dqHJ1Ra6uaDw6IiICkKylfLEDV1dJ8j83XXMS7yA22G2XSczn4QwA6H4u876DXBexOLjJQDKRwF5/QdOc32VCQwQAAAAASUVORK5CYII"},{ name : "R_one_png", data : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAERJREFUSIljlKrf+Z+BhoCJloaPWjBqAXbwtMGNdhaQajhJFjxtcGOQbthFOwvIMZwkC8gFoxYMvAWMo/XBqAWjFjAAAIp0DHwJH3D+AAAAAElFTkSuQmCC"},{ name : "R_zero_png", data : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAChJREFUSIljlKrf+Z+BhoCJloaPWjBqwagFoxaMWjBqwagFoxZQDwAA7ewCgSs7134AAAAASUVORK5CYII"}];
 haxe_ds_ObjectMap.count = 0;
-var __map_reserved = {};
-haxe_MainLoop.add(hxd_System.updateCursor,-1);
-js_Boot.__toStr = ({ }).toString;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
 }});
+haxe_MainLoop.add(hxd_System.updateCursor,-1);
+js_Boot.__toStr = ({ }).toString;
 format_gif_Tools.LN2 = Math.log(2);
 format_mp3_MPEG.V1 = 3;
 format_mp3_MPEG.V2 = 2;
@@ -56240,7 +55913,7 @@ hxd_fmt_hmd_Data.CURRENT_VERSION = 3;
 hxd_fmt_hmd_Reader.BLEND = h2d_BlendMode.__empty_constructs__.slice();
 hxd_fmt_hmd_Reader.CULLING = h3d_mat_Face.__empty_constructs__.slice();
 hxd_fs_EmbedFileSystem.invalidChars = new EReg("[^A-Za-z0-9_]","g");
-hxd_res_Resource.LIVE_UPDATE = true;
+hxd_res_Resource.LIVE_UPDATE = false;
 hxd_res__$Image_ImageFormat_$Impl_$.Jpg = 0;
 hxd_res__$Image_ImageFormat_$Impl_$.Png = 1;
 hxd_res__$Image_ImageFormat_$Impl_$.Gif = 2;
@@ -56480,5 +56153,3 @@ hxsl_SharedShader.UNROLL_LOOPS = false;
 	haxe_EntryPoint.run();
 }
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
-
-//# sourceMappingURL=haxesweeper.js.map

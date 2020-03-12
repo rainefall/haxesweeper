@@ -1,4 +1,4 @@
 -lib heaps
--js haxesweeper.js
+-lib hlsdl
+-hl haxesweeper.hl
 -main Main
--debug
