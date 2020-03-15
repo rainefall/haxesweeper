@@ -9,41 +9,15 @@ class Main extends hxd.App {
     var board : Array<Array<Int>>;
     // resources
     var tiles : Array<h2d.Tile>;
+    var blank : h2d.Tile;
     // sprites
-    var visuals : Array<h2d.Object> = [];
-    var blanks : Array<h2d.Object> = [];
+    var visuals : Array<h2d.Object>;
+    var blanks : Array<h2d.Object>;
 
-    override function init() {
-        /*
-        obj = new h2d.Object(s2d);
-
-        obj.x = Std.int(s2d.width / 2);
-        obj.y = Std.int(s2d.height / 2);
-
-        // load the haxe logo png into a tile
-        var tile = hxd.Res.mann.toTile();
-
-        // change its pivot so it is centered
-        tile = tile.center();
-
-        var bmp = new h2d.Bitmap(tile, obj);
-        */
-        // load tiles, please replace these
-        tiles = [
-            hxd.Res.mann.toTile(), // mine
-            hxd.Res.zero.toTile(), // 0
-            hxd.Res.one.toTile(), // 1
-            hxd.Res.two.toTile(), // 2
-            hxd.Res.mann.toTile(), // 3
-            hxd.Res.mann.toTile(), // 4
-            hxd.Res.mann.toTile(), // 5
-            hxd.Res.mann.toTile(), // 6
-            hxd.Res.mann.toTile(), // 7
-            hxd.Res.mann.toTile()  // 8
-        ];
-
-        var blank = hxd.Res.blank.toTile();
-
+    function generateBoard() {
+        blanks = [];
+        visuals = []; 
+        
         // generate board
         board = [for (y in 0...BoardHeight) [for (x in 0...BoardWidth) 0 ]];
 
@@ -77,7 +51,7 @@ class Main extends hxd.App {
                     if (y < BoardHeight-1 && board[y+1][x] == -1) n++;
                     if (y < BoardHeight-1 && x < BoardWidth-1 && board[y+1][x+1] == -1) n++;
                     
-                    board[y][x] = Std.int(Math.min(n, 8));
+                    board[y][x] = n;
                 }
                 // make visuals
                 visuals.push(new h2d.Object(s2d));
@@ -98,31 +72,68 @@ class Main extends hxd.App {
         }
     }
 
+    override function init() {
+        /*
+        obj = new h2d.Object(s2d);
+
+        obj.x = Std.int(s2d.width / 2);
+        obj.y = Std.int(s2d.height / 2);
+
+        // load the haxe logo png into a tile
+        var tile = hxd.Res.mann.toTile();
+
+        // change its pivot so it is centered
+        tile = tile.center();
+
+        var bmp = new h2d.Bitmap(tile, obj);
+        */
+        // load tiles, please replace these
+        tiles = [
+            hxd.Res.bomb.toTile(), // mine
+            hxd.Res.zero.toTile(), // 0
+            hxd.Res.one.toTile(), // 1
+            hxd.Res.two.toTile(), // 2
+            hxd.Res.three.toTile(), // 3
+            hxd.Res.four.toTile(), // 4
+            hxd.Res.five.toTile(), // 5
+            hxd.Res.six.toTile(), // 6
+            hxd.Res.seven.toTile(), // 7
+            hxd.Res.eight.toTile()  // 8
+        ];
+
+        blank = hxd.Res.blank.toTile();
+
+        generateBoard();
+    }
+
     inline function reveal(x:Int, y:Int){
-        visuals[y*BoardHeight+x].visible = true;
-        blanks[y*BoardHeight+x].visible = false;
-        if (board[y][x] == 0) {
-            // it's zero we can reveal everything around it no problem
-            //revealSurroundings(x,y);
-        }
-        if (board[y][x] == -1) {
-            // you lose
-            trace("boom");
+        if (visuals[y*BoardHeight+x].visible == false) {
+            visuals[y*BoardHeight+x].visible = true;
+            blanks[y*BoardHeight+x].visible = false;
+            if (board[y][x] == 0) {
+                // it's zero we can reveal everything around it no problem
+                revealSurroundings(x,y);
+            }
+            if (board[y][x] == -1) {
+                // you lose
+                trace("boom");
+                generateBoard();
+            }
         }
     }
 
     inline function revealSurroundings(x:Int, y:Int) {
         trace (x); trace (y);
-        if (y > 0 && x > 0 && board[y-1][x-1] != -1) reveal(x-1, y-1); // ul
-        if (y > 0 && board[y-1][x] != -1) reveal(x, y-1); // uc
-        if (y > 0 && x < BoardWidth-1 && board[y-1][x+1] != -1) reveal(x+1, y-1); // ur
+        if (y > 0 && x > 0) reveal(x-1, y-1); // ul
+        if (y > 0) reveal(x, y-1); // uc
+        if (y > 0 && x < BoardWidth-1) reveal(x+1, y-1); // ur
 
-        if (x > 0 && board[y][x-1] != -1) reveal(x-1, y); // cl
-        if (x < BoardWidth-1 && board[y][x+1] != -1) reveal(x+1, y); // cr
+        if (x > 0) reveal(x-1, y); // cl
+        if (x < BoardWidth-1) reveal(x+1, y); // cr
 
-        if (y < BoardHeight-1 && x > 0 && board[y+1][x-1] != -1) reveal(x-1, y+1); // ll
-        if (y < BoardHeight-1 && board[y+1][x] != -1) reveal(x, y+1); // lc
-        if (y < BoardHeight-1 && x < BoardWidth-1 && board[y+1][x+1] != -1) reveal(x+1, y+1); // lr
+        if (y < BoardHeight-1 && x > 0) reveal(x-1, y+1); // ll
+        if (y < BoardHeight-1) reveal(x, y+1); // lc
+        if (y < BoardHeight-1 && x < BoardWidth-1) reveal(x+1, y+1); // lr
     }
 
     override function update(dt:Float) {
