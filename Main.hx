@@ -1,11 +1,12 @@
+import h3d.Vector;
 import hxd.Key;
 import h2d.Interactive;
 import h2d.Object;
 
 class Main extends hxd.App {
-    var BoardWidth = 14;
-    var BoardHeight = 14;
-    var Bombs = 14;
+    var BoardWidth = 64;
+    var BoardHeight = 32;
+    var Bombs = 256;
     var board : Array<Array<Int>>;
     // resources
     var tiles : Array<h2d.Tile>;
@@ -13,8 +14,12 @@ class Main extends hxd.App {
     // sprites
     var visuals : Array<h2d.Object>;
     var blanks : Array<h2d.Object>;
+    var text : h2d.Text;
+
+    var exploded : Bool;
 
     function generateBoard() {
+        exploded = false;
         blanks = [];
         visuals = []; 
         
@@ -55,21 +60,38 @@ class Main extends hxd.App {
                 }
                 // make visuals
                 visuals.push(new h2d.Object(s2d));
-                visuals[y*BoardHeight+x].addChild(new h2d.Bitmap(tiles[board[y][x]+1]));
-                visuals[y*BoardHeight+x].setPosition(x * 24, y * 24);
-                visuals[y*BoardHeight+x].visible = false;
+                visuals[y*BoardWidth+x].addChild(new h2d.Bitmap(tiles[board[y][x]+1]));
+                var interact = new h2d.Interactive(24,24,visuals[y*BoardWidth+x]);
+                interact.onClick = function(e : hxd.Event) {
+                    if (exploded) {
+                        generateBoard();
+                    }
+                }
+                visuals[y*BoardWidth+x].addChild(interact);
+                visuals[y*BoardWidth+x].setPosition(x * 24, y * 24);
+                visuals[y*BoardWidth+x].visible = false;
                 // generate visualse: blanks
                 blanks.push(new h2d.Object(s2d));
-                blanks[y*BoardHeight+x].addChild(new h2d.Bitmap(blank));
+                blanks[y*BoardWidth+x].addChild(new h2d.Bitmap(blank));
                 // interactability
-                var interact = new h2d.Interactive(24,24,blanks[y*BoardHeight+x]);
+                interact = new h2d.Interactive(24,24,blanks[y*BoardWidth+x]);
                 interact.onClick = function(e : hxd.Event) {
-                    if (e.button == 0) reveal(x, y);
+                    if (exploded) {
+                        generateBoard();
+                    } else if (e.button == 0) {
+                        reveal(x, y);
+                    }
                 }
-                blanks[y*BoardHeight+x].addChild(interact);
-                blanks[y*BoardHeight+x].setPosition(x * 24, y * 24);
+                blanks[y*BoardWidth+x].addChild(interact);
+                blanks[y*BoardWidth+x].setPosition(x * 24, y * 24);
             }
         }
+
+        text = new h2d.Text(hxd.res.DefaultFont.get(), s2d);
+        text.setPosition(32,32);
+        text.color = new h3d.Vector(0,0,0);
+        text.text = "you utter fool.";
+        text.visible = false;
     }
 
     override function init() {
@@ -107,17 +129,17 @@ class Main extends hxd.App {
     }
 
     inline function reveal(x:Int, y:Int){
-        if (visuals[y*BoardHeight+x].visible == false) {
-            visuals[y*BoardHeight+x].visible = true;
-            blanks[y*BoardHeight+x].visible = false;
+        if (visuals[y*BoardWidth+x].visible == false) {
+            visuals[y*BoardWidth+x].visible = true;
+            blanks[y*BoardWidth+x].visible = false;
             if (board[y][x] == 0) {
                 // it's zero we can reveal everything around it no problem
                 revealSurroundings(x,y);
             }
             if (board[y][x] == -1) {
                 // you lose
-                trace("boom");
-                generateBoard();
+                text.visible = true;
+                exploded = true;
             }
         }
     }
